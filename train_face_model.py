@@ -38,7 +38,7 @@ for root, dirs, files in os.walk(image_dir):
                 x_train.append(roi)
                 y_train.append(id)
 
-with open('model.pkl', 'wb') as file:
+with open('labels.pkl', 'wb') as file:
     pickle.dump(label_ids, file)
 
 recognizer.train(x_train, np.array(y_train))

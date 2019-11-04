@@ -24,7 +24,7 @@ while True:
         id, confidence = recognizer.predict(roi_gray)
         # if confidence >= 20: #and confidence <= 85:
         print(labels[id])
-        cv2.putText(frame, labels[id], (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 3, cv2.LINE_AA)
+        cv2.putText(frame, labels[id], (x, y-7), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 1, cv2.LINE_AA)
         # cv2.imwrite("capture.png", roi_gray)
 
     # displaying the frame
