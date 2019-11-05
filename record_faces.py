@@ -15,8 +15,15 @@ if not os.path.isdir(os.path.join(image_dir, label)):
 label_dir = os.path.join(BASE_DIR, 'data', label)
 os.chdir(label_dir)
 
+completed = True
+TOTAL_SAMPLES = 200
 
-while file_number < 200:
+while file_number < TOTAL_SAMPLES:
+
+    percentage = round((file_number/TOTAL_SAMPLES)*100, 2)
+    print(f'{percentage}% data collected.', end='\r')
+
+
     _, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -33,4 +40,12 @@ while file_number < 200:
 
     if cv2.waitKey(25) & 0XFF == ord('q'):
         cv2.destroyAllWindows()
+        completed = False        
         break
+
+if completed:
+    print(
+'''Training Sample collected! Now please train the model.
+
+-- to train the model, use the command:
+    python3 run.py train''')
