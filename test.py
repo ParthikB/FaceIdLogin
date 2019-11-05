@@ -1,21 +1,38 @@
-import errno, os, stat, shutil
+import cv2
+import numpy as np
+import pickle
 
-def handleRemoveReadonly(func, path, exc):
-  excvalue = exc[1]
-  if func in (os.rmdir, os.remove) and excvalue.errno == errno.EACCES:
-      os.chmod(path, stat.S_IRWXU| stat.S_IRWXG| stat.S_IRWXO) # 0777
-      func(path)
-  else:
-      raise
+face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+recognizer = cv2.face.LBPHFaceRecognizer_create()
+recognizer.read('model.yml')
 
-PATH = os.path.join(os.curdir, 'test')
-print(PATH) #./data
+print('Press "q" to end testing.')
 
-for file in os.listdir():
-	shutil.rmtree(file, ignore_errors=False, onerror=handleRemoveReadonly)
+labels = {}
+with open('labels.pkl', 'rb') as file:
+    labels = pickle.load(file)
+    labels = {v:k for k,v in labels.items()}
 
-print('Database Erased...!')
-print('''
+cap = cv2.VideoCapture(0)
 
---create new Database using command,
-	python3 run.py record''')
+while True:
+    ret, frame = cap.read()
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.5, 5)
+
+    for (x, y, w, h) in faces:
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        roi_gray = gray[y:y+h, x:x+h]
+        id, confidence = recognizer.predict(roi_gray)
+        # if confidence >= 20: #and confidence <= 85:
+        print("--> Prediction :", labels[id], end='\r')
+        cv2.putText(frame, labels[id], (x, y-7), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 1, cv2.LINE_AA)
+        # cv2.imwrite("capture.png", roi_gray)
+
+    # displaying the frame
+    cv2.imshow("cam", frame)
+    if cv2.waitKey(25) & 0xFF == ord('q'):
+        cv2.destroyAllWindows()
+        break
+
+print('Testing terminated.')

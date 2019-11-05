@@ -7,6 +7,10 @@ file_number = 0
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 image_dir = os.path.join(BASE_DIR, 'data')
+
+if not os.path.isfile(image_dir):
+    os.mkdir(image_dir)
+
 os.chdir(image_dir)
 
 label = input("Enter name : ").lower()

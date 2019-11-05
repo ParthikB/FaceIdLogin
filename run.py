@@ -11,11 +11,11 @@ def main(mode):
 	if mode == 'train':
 		import train_face_model
 	elif mode == 'test':
-		import main
+		import test
 	elif mode == 'record':
 		import record_faces
 	elif mode == 'reset':
-		reset()
+		import reset
 
 def reset():
 	PATH = os.path.join(os.curdir, 'data')
