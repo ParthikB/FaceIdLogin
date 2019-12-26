@@ -13,11 +13,11 @@ Step 1 | Run the following command to install necessary dependencies
 
         pip install -r requirements.txt
 
-Step 2 | To create data/record face data, run the following command
+Step 2 | To create/record face data, run the following command
 
         python run.py record
         
-Step 3 | Once after the faces are recorded, train the model using
+Step 3 | Once the faces are recorded, train the model using
 
         python run.py train
         
